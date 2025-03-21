@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自动PS模版脚本</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 44px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        label {
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            height: 35px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        input[type="number"] {
+            width: 60px;
+        }
+
+        select {
+            width: 100px;
+        }
+
+        button {
+            height: 35px;
+            padding: 0 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        textarea {
+            width: 100%;
+            height: 350px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 20px;
+            resize: vertical;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label {
+            min-width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-group">
+            <label for="dataTypeSelect">数据类型：</label>
+            <select id="dataTypeSelect">
+                <option value="pairs" selected>pairs</option>
+                <option value="marrish">marrish</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="modelSelect">模版：</label>
+            <select id="modelSelect">
+                <option value="1" selected>健康证模版（1）</option>
+                <option value="2">健康证模版（2）</option>
+                <option value="3">健康证模版（3）</option>
+                <option value="随机模版">随机模版</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="numValue">数量：</label>
+            <input id="numValue" type="number" min="1" value="50" />
+        </div>
+
+        <div class="form-group">
+            <label for="sexSelect">随机名字：</label>
+            <select id="sexSelect">
+                <option value="女" selected>女</option>
+                <option value="男">男</option>
+                <option value="随机">随机</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="minGivenYear">随机年龄：</label>
+            <input id="minGivenYear" type="number" min="1900" value="1983" />
+            ~
+            <input id="maxGivenYear" type="number" max="2025" value="1988" />
+        </div>
+
+        <button id="dataButt">数据生成（会自动下载csv文件）</button>
+
+        <textarea id="dataTxt" placeholder="生成数据"></textarea>
+    </div>
+    <script src="./自动PS模版脚本.js"></script>
+</body>
+
+</html>
