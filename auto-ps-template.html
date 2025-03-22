@@ -27,6 +27,28 @@
             max-width: 1000px;
         }
 
+        .container-top {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .container-top-left,
+        .container-top-rigth {
+            width: 50%;
+            height: 100%;
+        }
+
+        #PreviewBox {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #PreviewBox>img {
+            padding: 10px;
+            height: 100%;
+            max-width: 400px;
+        }
+
         label {
             margin-right: 15px;
             font-weight: bold;
@@ -90,49 +112,66 @@
 
 <body>
     <div class="container">
-        <div class="form-group">
-            <label for="dataTypeSelect">数据类型：</label>
-            <select id="dataTypeSelect">
-                <option value="pairs" selected>pairs</option>
-                <option value="marrish">marrish</option>
-            </select>
-            <a style="margin-left: auto;" target="_blank" href="https://t.me/MaiDouy">如有需要添加名字数据请点击联系TG</a>
+
+        <div class="container-top">
+            <div class="container-top-left">
+                <div class="form-group">
+                    <label for="dataTypeSelect">数据类型：</label>
+                    <select id="dataTypeSelect">
+                        <option value="pairs" selected>pairs</option>
+                        <option value="marrish">marrish</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modelSelect">模版：</label>
+                    <select id="modelSelect">
+                        <option value="1" selected>健康证模版（1）</option>
+                        <option value="2">健康证模版（2）</option>
+                        <option value="3">健康证模版（3）</option>
+                        <option value="随机模版">随机模版</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="numValue">数量：</label>
+                    <input id="numValue" type="number" min="1" value="50" />
+                </div>
+
+                <div class="form-group">
+                    <label for="sexSelect">随机名字：</label>
+                    <select id="sexSelect">
+                        <option value="女" selected>女</option>
+                        <option value="男">男</option>
+                        <option value="随机">随机</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="minGivenYear">随机年龄：</label>
+                    <input id="minGivenYear" type="number" min="1900" value="1983" />
+                    ~
+                    <input id="maxGivenYear" type="number" max="2025" value="1988" />
+                </div>
+
+            </div>
+
+            <div class="container-top-rigth"
+                style="display: flex;flex-direction: column;justify-content: space-between;">
+                <a style="margin-left: auto" target="_blank" href="https://t.me/MaiDouy">如有需要添加名字数据请点击联系TG</a>
+                <div style="display: flex;align-items:center;height: 300px;width: 100%;">
+                    <div id="PreviewBox">
+                        <img id="Preview" src="./img/model1.jpg">
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="modelSelect">模版：</label>
-            <select id="modelSelect">
-                <option value="1" selected>健康证模版（1）</option>
-                <option value="2">健康证模版（2）</option>
-                <option value="3">健康证模版（3）</option>
-                <option value="随机模版">随机模版</option>
-            </select>
+        <div class="container-buttom">
+            <button id="dataButt">数据生成（会自动下载csv文件）</button>
+
+            <textarea id="dataTxt" placeholder="生成数据"></textarea>
         </div>
-
-        <div class="form-group">
-            <label for="numValue">数量：</label>
-            <input id="numValue" type="number" min="1" value="50" />
-        </div>
-
-        <div class="form-group">
-            <label for="sexSelect">随机名字：</label>
-            <select id="sexSelect">
-                <option value="女" selected>女</option>
-                <option value="男">男</option>
-                <option value="随机">随机</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="minGivenYear">随机年龄：</label>
-            <input id="minGivenYear" type="number" min="1900" value="1983" />
-            ~
-            <input id="maxGivenYear" type="number" max="2025" value="1988" />
-        </div>
-
-        <button id="dataButt">数据生成（会自动下载csv文件）</button>
-
-        <textarea id="dataTxt" placeholder="生成数据"></textarea>
     </div>
     <script src="./auto-ps-template.js"></script>
 </body>
