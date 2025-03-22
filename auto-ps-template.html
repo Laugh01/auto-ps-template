@@ -1,179 +1,520 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自动PS模版脚本</title>
-    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <title>数据生成平台</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary: #3B82F6;
+            --secondary: #6B7280;
+            --background: #F9FAFB;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--background);
             margin: 0;
-            padding: 20px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .config-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .config-card {
+            background: var(--background);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+
+
+        .config-title {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            gap: 0.5rem;
         }
 
-        .container {
-            background-color: #fff;
-            padding: 44px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        .container-top {
+        .radio-group {
             display: flex;
-            flex-direction: row;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
         }
 
-        .container-top-left,
-        .container-top-rigth {
-            width: 50%;
-            height: 100%;
-        }
-
-        #PreviewBox {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        #PreviewBox>img {
-            padding: 10px;
-            height: 100%;
-            max-width: 400px;
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: 1.1em;
+            height: 1.1em;
+            accent-color: var(--primary);
         }
 
         label {
-            margin-right: 15px;
-            font-weight: bold;
-        }
-
-        input,
-        select {
-            height: 35px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        input[type="number"] {
-            width: 60px;
-        }
-
-        select {
-            width: 100px;
-        }
-
-        button {
-            height: 35px;
-            padding: 0 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        textarea {
-            width: 100%;
-            height: 350px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            margin-top: 20px;
-            resize: vertical;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
             display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary);
+            cursor: pointer;
+        }
+
+        .year-picker {
+            display: flex;
+            gap: 1rem;
             align-items: center;
         }
 
-        .form-group label {
-            min-width: 100px;
+        .year-input,
+        .number-input {
+            width: 120px;
+            padding: 0.75rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 0.5rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .year-input:focus,
+        .number-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .data-preview {
+            background: white;
+            border: 2px dashed #E5E7EB;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: pre-wrap;
+            user-select: all;
+            min-height: 150px;
+            max-height: 400px;
+            overflow: auto;
+        }
+
+        .action-btn {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+        }
+
+        .contact-link {
+            color: var(--secondary);
+            text-decoration: none;
+            margin-top: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .contact-link:hover {
+            color: var(--primary);
+        }
+
+        /* 多选下拉样式 */
+        .multiselect {
+            position: relative;
+            width: 100%;
+        }
+
+        .select-box {
+            border: 2px solid #E5E7EB;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .select-box:hover {
+            border-color: var(--primary);
+        }
+
+        .options-container {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            right: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            border: 2px solid #E5E7EB;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: -1;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .options-container.active {
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 100;
+        }
+
+        .search-box {
+            padding: 0.75rem;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .search-input {
+            width: calc(100% - 1rem);
+            padding: 0.5rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.25rem;
+        }
+
+        .option-group {
+            padding: 0.5rem;
+        }
+
+        .option-item {
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .option-item:hover {
+            background: var(--background);
+        }
+
+        .selected-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+        }
+
+        /* 新增模态框样式 */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        /* 加载状态样式 */
+        .preview-modal.loading:after {
+            content: "图片加载中...";
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .preview-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            animation: zoomIn 0.3s;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 80vh;
+            display: block;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        /* 为标签添加点击反馈 */
+        .tag {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .tag:hover {
+            transform: scale(1.05);
+        }
+
+        .tag-remove {
+            margin-left: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .tag-remove:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* 添加错误提示样式 */
+        .error-tip {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        /* 添加输入验证样式 */
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .year-input.invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-
-        <div class="container-top">
-            <div class="container-top-left">
-                <div class="form-group">
-                    <label for="dataTypeSelect">数据类型：</label>
-                    <select id="dataTypeSelect">
-                        <option value="pairs" selected>pairs</option>
-                        <option value="marrish">marrish</option>
-                    </select>
+    <div class="dashboard">
+        <div class="config-section">
+            <!-- 数据类型 -->
+            <div class="config-card">
+                <div class="config-title">
+                    <i class="fas fa-shapes"></i>
+                    数据类型
                 </div>
-
-                <div class="form-group">
-                    <label for="modelSelect">模版：</label>
-                    <select id="modelSelect">
-                        <option value="1" selected>健康证模版（1）</option>
-                        <option value="2">健康证模版（2）</option>
-                        <option value="3">健康证模版（3）</option>
-                        <option value="随机模版">随机模版</option>
-                    </select>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="group-type" value="pairs" checked>
+                        pairs
+                    </label>
+                    <label>
+                        <input type="radio" name="group-type" value="marrish">
+                        marrish
+                    </label>
                 </div>
-
-                <div class="form-group">
-                    <label for="numValue">数量：</label>
-                    <input id="numValue" type="number" min="1" value="50" />
-                </div>
-
-                <div class="form-group">
-                    <label for="sexSelect">随机名字：</label>
-                    <select id="sexSelect">
-                        <option value="女" selected>女</option>
-                        <option value="男">男</option>
-                        <option value="随机">随机</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="minGivenYear">随机年龄：</label>
-                    <input id="minGivenYear" type="number" min="1900" value="1983" />
-                    ~
-                    <input id="maxGivenYear" type="number" max="2025" value="1988" />
-                </div>
-
             </div>
 
-            <div class="container-top-rigth"
-                style="display: flex;flex-direction: column;justify-content: space-between;">
-                <a style="margin-left: auto" target="_blank" href="https://t.me/MaiDouy">如有需要添加名字数据请点击联系TG</a>
-                <div style="display: flex;align-items:center;height: 300px;width: 100%;">
-                    <div id="PreviewBox">
-                        <img id="Preview" src="./img/model1.jpg">
+            <!-- 数量设置 -->
+            <div class="config-card">
+                <div class="config-title">
+                    <i class="fas fa-hashtag"></i>
+                    数量设置
+                </div>
+                <input type="number" class="number-input" min="1" value="50">
+            </div>
+
+            <!-- 性别选择 -->
+            <div class="config-card">
+                <div class="config-title">
+                    <i class="fas fa-venus-mars"></i>
+                    性别选择
+                </div>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="gender" value="女" checked>
+                        女
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="男">
+                        男
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="随机">
+                        随机性别
+                    </label>
+                </div>
+            </div>
+
+            <!-- 年份范围 -->
+            <div class="config-card">
+                <div class="config-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    年份范围
+                </div>
+                <div class="year-picker">
+                    <div class="input-group">
+                        <input type="number" class="year-input" data-min="1960" data-max="1990" value="1980">
+                        <span class="separator">-</span>
+                        <input type="number" class="year-input" data-min="1960" data-max="1990" value="1985">
                     </div>
                 </div>
+                <div class="error-tip" id="yearErrorTip"></div>
             </div>
+
+            <!-- 模板版本 -->
+            <div class="config-card">
+                <div class="config-title">
+                    <i class="fas fa-file-alt"></i>
+                    模板版本
+                </div>
+                <div class="multiselect" id="versionSelect">
+                    <div class="select-box" onclick="toggleOptions(event)">
+                        <span id="selectedCount">已选择 (0)</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="options-container">
+                        <div class="search-box">
+                            <input type="text" class="search-input" placeholder="搜索模板..." onkeyup="filterOptions(this)">
+                        </div>
+                        <div class="option-group">
+                            <label class="option-item">
+                                <input type="checkbox" name="version" value="1" checked>
+                                健康证模版（1）
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" name="version" value="2">
+                                健康证模版（2）
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" name="version" value="3">
+                                健康证模版（3）
+                            </label>
+                        </div>
+                    </div>
+                    <div class="selected-tags" id="selectedTags"></div>
+                    <div class="error-tip" id="templateErrorTip">⚠️ 请至少选择一个模板版本</div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="container-buttom">
-            <button id="dataButt">数据生成（会自动下载csv文件）</button>
+        <div class="action-section">
+            <button id="saveCsvButton" class="action-btn" onclick="generateData()">
+                <i class="fas fa-file-download"></i>
+                生成数据（自动下载CSV）
+            </button>
 
-            <textarea id="dataTxt" placeholder="生成数据"></textarea>
+            <div class="data-preview" contenteditable="true">
+                {/* 示例数据 */}
+                账号----密码----辅助邮箱----昵称----地区----性别----出生日期----头像图----证件图----证件类型
+                1@gmail.com----1----BB----みなと----長崎----男----19851110----NA----19851110.jpg----5
+                2@gmail.com----2----BB----えみ----栃木----女----19850611----NA----19850611.jpg----5
+                3@gmail.com----3----BB----もえ----長崎----女----19840531----NA----19840531.jpg----5
+            </div>
+
+            <a href="https://t.me/MaiDouy" target="_blank" class="contact-link">
+                <i class="fab fa-telegram"></i>
+                需要添加名称数据？联系TG
+            </a>
         </div>
     </div>
-    <script src="./auto-ps-template.js"></script>
+
+    <!-- 新增图片预览模态框 -->
+    <div class="preview-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <img class="preview-image" src="" alt="模板预览">
+        </div>
+    </div>
+
 </body>
+
+<script src="./auto-ps-template.js"></script>
 
 </html>
